@@ -61,6 +61,7 @@ export default function TimersPage() {
     const newTimer = {
       id: Date.now(),
       time: initialTime || 0,
+      initialTime: initialTime || 0,
       isRunning: false,
       laps: [],
       type,
@@ -242,14 +243,14 @@ export default function TimersPage() {
                   )}
                 </button>
 
-                {timer.type === "stopwatch" && (
-                  <button
-                    onClick={() => addLap(timer.id)}
-                    className="px-4 py-2 bg-gray-500/10 rounded-lg hover:bg-gray-500/20"
-                  >
-                    Lap
-                  </button>
-                )}
+                {/* {timer.type === "stopwatch" && ( */}
+                <button
+                  onClick={() => addLap(timer.id)}
+                  className="px-4 py-2 bg-gray-500/10 rounded-lg hover:bg-gray-500/20"
+                >
+                  Lap
+                </button>
+                {/* )} */}
 
                 <button
                   onClick={() => resetTimer(timer.id)}
@@ -267,12 +268,18 @@ export default function TimersPage() {
                       <span>Lap {index + 1}</span>
                       <div className="flex gap-2">
                         <span>
-                          {index
-                            ? formatTime(
-                                lap - timer.laps[index - 1],
-                                globalHidden || timer.hidden
-                              )
-                            : null}
+                          {timer.type === "stopwatch"
+                            ? index
+                              ? formatTime(
+                                  lap - timer.laps[index - 1],
+                                  globalHidden || timer.hidden
+                                )
+                              : null
+                            : ""}
+                          {formatTime(
+                            (timer.laps[index - 1] || timer.initialTime) - lap,
+                            globalHidden || timer.hidden
+                          )}
                         </span>
                         <span>
                           {formatTime(lap, globalHidden || timer.hidden)}
